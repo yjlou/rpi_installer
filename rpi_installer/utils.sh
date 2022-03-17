@@ -105,6 +105,18 @@ append_if_not_existing() {
   fi
 }
 
+# Ask a question, get answer from the user, then replace the setting file.
+ask_and_replace() {
+  local question="$1"
+  local variable="$2"
+  local default="$3"
+  local answer=""
+
+  read -r -p "$question" answer
+  [ -z "$answer" ] && answer="$default"
+  sed -i "s~^$variable=.*$~$variable='$answer'~g" "$SETTINGS_TEMPORARY"
+}
+
 sanity_check() {
   local device="$1"
 

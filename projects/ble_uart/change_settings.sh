@@ -16,18 +16,6 @@ SETTINGS_SH="$GENERATED_DIR/$PROJECT_NAME/settings.sh"
 
 mkdir -p "$GENERATED_DIR/$PROJECT_NAME/"
 
-ask_and_replace() {
-  local question="$1"
-  local variable="$2"
-  local default="$3"
-  local answer=""
-
-  read -r -p "$question" answer
-  [ -z "$answer" ] && answer="$default"
-  sed -i "s~^$variable=.*$~$variable='$answer'~g" "$SETTINGS_TEMPORARY"
-}
-
-
 change_settigs_main() {
   FLAGS_HELP="USAGE: $0 [flags]"
   parse_args "$@"
