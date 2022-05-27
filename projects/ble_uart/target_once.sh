@@ -18,6 +18,9 @@ apt update -y
 apt install -y xxd curl tmux python3 python3-pip
 pip3 install -r /root/ble_uart/requirements.txt
 
+# Download necessary files
+# FIXME: cd /root/ble_uart/; ./envsetup.sh
+
 # Configure the network interfaces (this must be the last one since nmcli can change the network
 # settings and fail to connect network again.
 nmcli_setup
