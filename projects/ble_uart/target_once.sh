@@ -5,9 +5,12 @@
 set -e
 cd "$(dirname "$0")"
 . rpi_installer/common.sh
-. rpi_installer/nmcli.sh
-. vars.sh
+. "$GENERATED_DIR"/ble_uart/vars.sh
 . "$SETTINGS_SH"
+. rpi_installer/nmcli.sh
+. rpi_installer/target_setup.sh
+
+target_setup_pre_time_is_synced
 
 echo "- Setting up the locale and keyboard ..."
 wget -O - https://gist.githubusercontent.com/adoyle/71803222aff301da9662/raw/e40f2a447e0ae333801e6fddf5e6bdb7430c289d/raspi-init.sh | bash
@@ -19,7 +22,7 @@ apt install -y xxd curl tmux python3 python3-pip
 pip3 install -r /root/ble_uart/requirements.txt
 
 # Download necessary files
-# FIXME: cd /root/ble_uart/; ./envsetup.sh
+# TODO: cd /root/ble_uart/; ./envsetup.sh
 
 # Configure the network interfaces (this must be the last one since nmcli can change the network
 # settings and fail to connect network again.

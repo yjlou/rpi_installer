@@ -10,7 +10,7 @@ MOUNT_POINT_BOOT="$MOUNT_ROOT/boot"
 
 
 umount_all() {
-  echo "- Umounting ..."
+  echo "- Unmounting existing partitions (if any) ..."
   sudo umount "$MOUNT_POINT_BOOT" "$MOUNT_POINT_ROOTFS" || true
   sudo rmdir "$MOUNT_POINT_BOOT" "$MOUNT_POINT_ROOTFS" || true
 }

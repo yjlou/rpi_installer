@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
+#
+# Platform-independent helpers.  Used in both host and target.
+#
 
 set -e
 
 . rpi_installer/common.sh
-
-. "$DOWNLOADS_DIR"/shflags
 
 COLOR_RED="\e[41;30m"
 COLOR_GREEN="\e[42;30m"
@@ -31,33 +32,6 @@ msg_warn() {
 msg_fail() {
   local msg="$1"
   printf "${COLOR_NO}[ ${COLOR_RED}FAIL${COLOR_NO} ]${COLOR_WHITE} $msg\n${COLOR_NO}"
-}
-
-# Used to parse the script arguments. Please pass in the arguments.
-#
-#   parse_args "$@"
-#
-parse_args() {
-  # Common arguments. This will be applied to all scripts. Add wisely.
-  #
-  DEFINE_boolean 'do_nothing' false "Parse syntax only. Do nothing." 'n'
-  DEFINE_boolean 'force' false "Force to run program anyway." 'f'
-
-  # parse the command-line
-  FLAGS "$@" || exit $?
-  eval set -- "${FLAGS_ARGV}"
-
-  if [ ${FLAGS_help} -eq ${FLAGS_TRUE} ]; then
-    flags_help
-    exit 1
-  fi
-
-  if [ ${FLAGS_do_nothing} -eq ${FLAGS_TRUE} ]; then
-    msg_pass ""
-    msg_pass "Done."
-    msg_pass ""
-    exit
-  fi
 }
 
 is_running_on_arm() {
@@ -117,87 +91,3 @@ ask_and_replace() {
   sed -i "s~^$variable=.*$~$variable='$answer'~g" "$SETTINGS_TEMPORARY"
 }
 
-sanity_check() {
-  local device="$1"
-
-  # Prompt user if user config file is not generated yet.
-  if [ ! -f "$SETTINGS_SH" ]; then
-    msg_fail "'$SETTINGS_SH' is not found. Please run $PROJECT_DIR/change_settings.sh to generate it."
-    exit 2
-  fi
-
-  # Require the SD card device.
-  if [ -z "$device" ]; then
-    msg_fail "Please provide the device (ex /dev/sdz) of the SD card."
-    echo
-    flags_help
-    exit 1
-  fi
-
-  # Warn the user.
-  msg_warn "This will destroy the $device. Please confirm before we move on!"
-  if [ ${FLAGS_force} -ne ${FLAGS_TRUE} ]; then
-    read -r -p "Are you sure? [y/N] " response
-    case "$response" in
-        [yY][eE][sS]|[yY])
-            true
-            ;;
-        *)
-            exit 1
-            ;;
-    esac
-  fi
-
-  # Ask for sudo grant now. So that we don't ask the user again.
-  sudo echo -n
-}
-
-dd_image() {
-  local img_file="$1"
-  local device="$2"
-
-  echo "- Write the Raspberry Pi image into SD card [$device] ..."
-  sudo dd if="$img_file" of="$device" bs=1M status=progress
-  echo "- Re-detect the partition ..."
-  sudo partprobe "$device"  # re-detect the partition table.
-  sleep 3
-  echo "- Mounting SD card ..."
-  mount_all "$device"
-}
-
-# Install the RPi installer itself to /root/
-#
-# Assume the rootfs has mounted.
-#
-install_rpi_installer() {
-  local TARGET="$RPI_INSTALLER_DIR_TARGET"
-
-  sudo mkdir -p "$TARGET"
-  sudo cp -r "$RPI_INSTALLER_DIR" "$TARGET"
-}
-
-append_to_rc_local() {
-  local cmds="$@"
-
-  # Remot the last of file, which is "exit 0"
-  sudo sed -i '$d' "$RC_LOCAL_FILE"
-
-  echo "$@" | sudo tee -a "$RC_LOCAL_FILE"
-
-  # Move back the "exit 0" line.
-  echo "exit 0" | sudo tee -a "$RC_LOCAL_FILE"
-}
-
-hints_at_end() {
-  echo "--------------------------------------------------------------------------"
-  echo "+ Insert the SD card into the Raspberry Pi board."
-  echo "+ Connect an Ethernet conenction to the Internet."
-  echo "+ Power up the board, and wait for about 30 mins."
-  echo "+ The board will be automatically shut down after successful installation."
-  echo "+ If not, please log in and check the '/var/log/setup.log' file."
-  echo "--------------------------------------------------------------------------"
-  if [ ! -z "$ETH0_IPV4_ADDR" ]; then
-    echo "After installation, ssh to root@${ETH0_IPV4_ADDR%/*}"
-    echo "--------------------------------------------------------------------------"
-  fi
-}

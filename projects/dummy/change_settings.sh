@@ -8,12 +8,11 @@ cd "$(dirname "${BASH_SOURCE[0]}")"/../../  # to the root of the rpi_installer
 . rpi_installer/common.sh
 . "$RPI_INSTALLER_DIR"/utils.sh
 . "$RPI_INSTALLER_DIR"/host_utils.sh
-. projects/ble_uart/vars.sh
+. projects/dummy/vars.sh
 
 
 SETTINGS_TEMPLATE="$PROJECT_DIR/settings.sh.template"
 SETTINGS_TEMPORARY="$GENERATED_DIR/$PROJECT_NAME/settings.sh.temporary"
-SETTINGS_SH="$GENERATED_DIR/$PROJECT_NAME/settings.sh"
 
 mkdir -p "$GENERATED_DIR/$PROJECT_NAME/"
 
