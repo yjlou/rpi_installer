@@ -30,6 +30,7 @@ nmcli_ethernet_dhcp() {
   $NMCLI con delete "$ifname" || true
   $NMCLI con add type ethernet con-name "$ifname" ifname "$ifname"
   $NMCLI con modify "$ifname" connection.autoconnect yes
+  $NMCLI con modify id "$ifname" 802-3-ethernet.mac-address ""
   $NMCLI con modify "$ifname" ipv4.method auto
 }
 
@@ -41,6 +42,7 @@ nmcli_ethernet_static() {
   $NMCLI con delete "$ifname" || true
   $NMCLI con add type ethernet con-name "$ifname" ifname "$ifname"
   $NMCLI con modify "$ifname" connection.autoconnect yes
+  $NMCLI con modify id "$ifname" 802-3-ethernet.mac-address ""
   $NMCLI con modify "$ifname" ipv4.addresses "$address"
   $NMCLI con modify "$ifname" ipv4.gateway "$gateway"
   $NMCLI con modify "$ifname" ipv4.method manual
@@ -70,6 +72,7 @@ nmcli_wifi_dhcp() {
   $NMCLI con delete "$ssid" || true
   $NMCLI dev wifi connect "$ssid" $password ifname "$ifname"
   $NMCLI con modify "$ssid" connection.autoconnect yes
+  $NMCLI con modify id "$ssid" 802-11-wireless.mac-address ""
   $NMCLI con modify "$ssid" ipv4.method auto
 }
 
@@ -84,6 +87,7 @@ nmcli_wifi_static() {
   $NMCLI con delete "$ssid" || true
   $NMCLI dev wifi connect "$ssid" $password ifname "$ifname"
   $NMCLI con modify "$ssid" connection.autoconnect yes
+  $NMCLI con modify id "$ssid" 802-11-wireless.mac-address ""
   $NMCLI con modify "$ssid" ipv4.addresses "$address"
   $NMCLI con modify "$ssid" ipv4.gateway "$gateway"
   $NMCLI con modify "$ssid" ipv4.method manual
