@@ -91,3 +91,15 @@ ask_and_replace() {
   sed -i "s~^$variable=.*$~$variable='$answer'~g" "$SETTINGS_TEMPORARY"
 }
 
+# Once sudo authentication is successful, keep this script authenticated until the program stops.
+# Credits: https://serverfault.com/questions/266039/temporarily-increasing-sudos-timeout-for-the-duration-of-an-install-script
+keep_sudo() {
+  trap "exit" INT TERM
+  trap "kill 0" EXIT
+  sudo -v || exit $?
+  sleep 1
+  while true; do
+      sleep 56
+      sudo -nv
+  done 2>/dev/null &
+}

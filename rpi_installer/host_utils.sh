@@ -71,6 +71,8 @@ host_sanity_check() {
 
   # Ask for sudo grant now. So that we don't ask the user again.
   sudo echo -n
+  # Then keep the sudo working until the program terminates.
+  keep_sudo
 }
 
 host_dd_image() {
