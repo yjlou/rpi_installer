@@ -2,7 +2,6 @@
 #
 #  Running on the host. You must provide a Raspian OS image path and a SD device path.
 #
-#  
 
 set -e
 
@@ -21,6 +20,18 @@ main() {
 
   host_sanity_check "$device"
 
+  umount_all
+
+  host_dd_image "$img_file" "$device"
+
+  host_install_rpi_installer
+  host_copy_vars_and_settings
+  copy_ssh_credential
+
+  host_copy_conf
+  host_set_config_file
+  host_install_target_once
+
   echo "- Downloading BLE UART code ..."
   if [ -d "$BLE_UART_DIR_HOST" ]; then
     msg_pass "Directory [$BLE_UART_DIR_HOST] exists."
@@ -28,33 +39,11 @@ main() {
     git clone git@github.com:yjlou/ble_uart.git "$BLE_UART_DIR_HOST"
   fi
 
-  echo "- Unmounting existing partitions (if any) ..."
-  umount_all
-
-  host_dd_image "$img_file" "$device"
-  
-  ###########################################################################
-  #
-  #  Let's do some real works now !!!!!
-  #
-  ###########################################################################
-
-  host_install_rpi_installer
-  host_copy_vars_and_settings
-
   # Copy BLE UART code
   local TARGET_PROGRAM_DIR="${MOUNT_ROOT}/rootfs/${BLE_UART_DIR_TARGET}"
   echo "- Copying all scripts into $TARGET_PROGRAM_DIR ..."
   sudo mkdir -p "$TARGET_PROGRAM_DIR"
   sudo cp -v -rf -L "$BLE_UART_DIR_HOST"/* "$TARGET_PROGRAM_DIR"
-
-  # Copy ssh credential for the host to login.
-  copy_ssh_credential
-
-  # host_copy_conf
-  host_set_config_file
-
-  host_install_target_once
 
   # TODO: use tmux.sh
   # TODO: move to projects/ble_uart/everytime.sh
