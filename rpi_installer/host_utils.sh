@@ -20,6 +20,7 @@ parse_args() {
   #
   DEFINE_boolean 'do_nothing' false "Parse syntax only. Do nothing." 'n'
   DEFINE_boolean 'force' false "Force to run program anyway." 'f'
+  DEFINE_boolean 'project_only' false "Execute the project-specific code only." 'p'
 
   # parse the command-line
   FLAGS "$@" || exit $?
