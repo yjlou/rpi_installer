@@ -100,13 +100,6 @@ host_install_rpi_installer() {
   sudo cp -r "$RPI_INSTALLER_DIR" "$TARGET"
 }
 
-host_copy_vars_and_settings() {
-  local target_gen_dir="$RPI_INSTALLER_DIR_TARGET/$GENERATED_DIR/$PROJECT_NAME/"
-  sudo mkdir -p "$target_gen_dir"
-  sudo cp "$PROJECT_DIR"/vars.sh "$target_gen_dir"
-  sudo cp "$SETTINGS_SH" "$target_gen_dir"
-}
-
 host_copy_conf() {
   sudo cp conf/.bashrc conf/.tmux.conf "${MOUNT_ROOT}/rootfs/root/"
 }
@@ -131,8 +124,30 @@ host_append_to_rc_local() {
 host_install_target_once() {
   echo "- Install run once program into '$RC_LOCAL_FILE' ..."
   sudo mkdir -p "$RPI_INSTALLER_DIR_TARGET"
-  sudo cp -r "$PROJECT_DIR/target_once.sh" "$RPI_INSTALLER_DIR_TARGET"
-  host_append_to_rc_local "/root/$RPI_INSTALLER_DIR/rpi_installer/run_once.sh /root/$RPI_INSTALLER_DIR/target_once.sh >> /var/log/setup.log 2>&1"
+  sudo cp -r "$PROJECT_DIR/target_once.sh" "$RPI_INSTALLER_DIR_TARGET/target_once.sh-$PROJECT_NAME"
+  host_append_to_rc_local "/root/$RPI_INSTALLER_DIR/rpi_installer/run_once.sh /root/$RPI_INSTALLER_DIR/target_once.sh-$PROJECT_NAME >> /var/log/setup.log 2>&1"
+}
+
+host_pre() {
+  local img_file="$1"
+  local device="$2"
+
+  host_sanity_check "$device"
+
+  umount_all
+
+  host_dd_image "$img_file" "$device"
+
+  host_install_rpi_installer
+  copy_ssh_credential
+  host_set_config_file
+}
+
+host_copy_vars_and_settings() {
+  local target_gen_dir="$RPI_INSTALLER_DIR_TARGET/$GENERATED_DIR/$PROJECT_NAME/"
+  sudo mkdir -p "$target_gen_dir"
+  sudo cp "$PROJECT_DIR"/vars.sh "$target_gen_dir"
+  sudo cp "$SETTINGS_SH" "$target_gen_dir"
 }
 
 host_hints_at_end() {
@@ -149,3 +164,8 @@ host_hints_at_end() {
   fi
 }
 
+host_post() {
+  mount_finish
+  msg_pass "Done"
+  host_hints_at_end
+}

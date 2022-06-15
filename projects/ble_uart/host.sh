@@ -14,22 +14,8 @@ set -e
 . "$(dirname "$0")"/change_settings.sh
 . "$SETTINGS_SH"  || true
 
-main() {
-  local img_file="$1"
-  local device="$2"
-
-  host_sanity_check "$device"
-
-  umount_all
-
-  host_dd_image "$img_file" "$device"
-
-  host_install_rpi_installer
+host_project() {
   host_copy_vars_and_settings
-  copy_ssh_credential
-
-  host_copy_conf
-  host_set_config_file
   host_install_target_once
 
   echo "- Downloading BLE UART code ..."
@@ -53,13 +39,17 @@ main() {
   host_append_to_rc_local "tmux send-keys -t ble_uart:daemon './ble_uart.py -l' Enter"
   host_append_to_rc_local "tmux new-window -t ble_uart -n help"
   host_append_to_rc_local "tmux send-keys -t ble_uart:help './ble_uart.py --help' Enter"
-
-  mount_finish
-  msg_pass "Done"
-  host_hints_at_end
 }
+
 
 FLAGS_HELP="USAGE: $0 [flags] image_file /dev/sdcard"
 parse_args "$@"
 eval set -- "${FLAGS_ARGV}"
-main "$@"
+
+if [ ${FLAGS_project_only} -eq ${FLAGS_TRUE} ]; then
+  host_project "$@"
+else
+  host_pre "$@"
+  host_project "$@"
+  host_post "$@"
+fi
