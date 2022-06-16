@@ -16,12 +16,12 @@ set -e
 . "$SETTINGS_SH"  || true
 
 host_project() {
+  # These helpers need project-specific settings.
   host_copy_vars_and_settings
   host_install_target_once
-  host_copy_conf
 
-  # Define your project specific code here.
-  true
+  # Define your project specific code below.
+  host_copy_conf
 }
 
 

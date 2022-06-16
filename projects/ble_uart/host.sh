@@ -15,9 +15,11 @@ set -e
 . "$SETTINGS_SH"  || true
 
 host_project() {
+  # These helpers need project-specific settings.
   host_copy_vars_and_settings
   host_install_target_once
 
+  # Define your project specific code below.
   echo "- Downloading BLE UART code ..."
   if [ -d "$BLE_UART_DIR_HOST" ]; then
     msg_pass "Directory [$BLE_UART_DIR_HOST] exists."
