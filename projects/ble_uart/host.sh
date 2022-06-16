@@ -42,7 +42,7 @@ host_project() {
 }
 
 
-FLAGS_HELP="USAGE: $0 [flags] image_file /dev/sdcard"
+FLAGS_HELP="USAGE: $0 [flags] /dev/sdcard image_file"
 parse_args "$@"
 eval set -- "${FLAGS_ARGV}"
 

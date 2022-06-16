@@ -129,8 +129,8 @@ host_install_target_once() {
 }
 
 host_pre() {
-  local img_file="$1"
-  local device="$2"
+  local device="$1"
+  local img_file="$2"
 
   host_sanity_check "$device"
 
