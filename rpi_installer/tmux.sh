@@ -45,12 +45,13 @@ tmux_start_cmd() {
   local ARGS=("$@")
   local SESSION="$1"
   local WINDOW="$2"
-  local CMD="$3"  # TODO: supports multiple arguments.
+  local CMD="$3"
+  local REMAINS="${@:4}"
 
   if [ -z "$SESSION" -o -z "$WINDOW" ]; then
     echo "false"
     return
   fi
 
-  echo "tmux send-keys -t $SESSION:$WINDOW $CMD Enter"
+  echo "tmux send-keys -t $SESSION:$WINDOW $CMD $REMAINS Enter"
 }
