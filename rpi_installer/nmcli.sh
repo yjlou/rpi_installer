@@ -102,6 +102,10 @@ nmcli_wifi_conn() {
   local ssid="$4"
   local password="$5"
 
+  if [ -z "$ssid" ]; then
+    return
+  fi
+
   if [ -z "$address" ]; then
     nmcli_wifi_dhcp "${ifname}" "$ssid" "$password"
   else
