@@ -16,11 +16,11 @@ nmcli_restart() {
 nmcli_setup() {
   apt install -y "network-manager"
 
+  nmcli_restart
   if ! systemctl is-active --quiet NetworkManager.service; then
     systemctl start NetworkManager.service
     systemctl enable NetworkManager.service
   fi
-
   nmcli_restart
 }
 
