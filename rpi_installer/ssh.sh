@@ -15,5 +15,5 @@ copy_ssh_credential() {
   local SSH_ROOT="${MOUNT_ROOT}/rootfs/root/.ssh/"
   sudo mkdir -p "$SSH_ROOT"
   # For user to login this device.
-  cat ~/.ssh/id_rsa.pub | sudo tee -a "$SSH_ROOT"/authorized_keys
+  cat ~/.ssh/id_rsa.pub | sudo tee -a "$SSH_ROOT"/authorized_keys > /dev/null
 }
