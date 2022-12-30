@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#
+# This file contains the user's settings. Modified by change_settings.sh.
+#
+set -e
+
+# WLAN
+WLAN0_AP_BAND='g'
+WLAN0_AP_CHANNEL='11'
+WLAN0_AP_SSID='softap'
+WLAN0_AP_PASSWORD='kp_sucks'
+WLAN0_AP_IPV4_GW='192.168.1.1'
+
+# Ethernet
+ETH0_IPV4_ADDR=''
+ETH0_IPV4_GW=''
+ETH0_IPV4_DNS='8.8.8.8'
+
+# Timezone
+TIMEZONE=''
+
+# For rpi_installer/target_setup.sh
+PROJECT_SETTINGS_IMPORTED='1'
