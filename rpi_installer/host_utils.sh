@@ -6,6 +6,7 @@
 set -e
 
 . rpi_installer/common.sh
+. rpi_installer/ssh.sh
 
 . "$DOWNLOADS_DIR"/shflags
 
