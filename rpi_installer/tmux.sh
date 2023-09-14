@@ -53,5 +53,5 @@ tmux_start_cmd() {
     return
   fi
 
-  echo "tmux send-keys -t $SESSION:$WINDOW $CMD $REMAINS Enter"
+  echo "tmux send-keys -t $SESSION:$WINDOW '$CMD $REMAINS' Enter"
 }
