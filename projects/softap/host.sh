@@ -25,10 +25,10 @@ host_project() {
   # Copy soft AP specific configuration files to /etc.
   sudo cp -r "$PROJECT_DIR/conf" "${MOUNT_ROOT}/rootfs/root/$RPI_INSTALLER_DIR/"
 
-  # special handle for WLAN DHCP addresses
+  # Special handle for WLAN DHCP addresses.
   local WLAN0_AP_IPV4_START=$(awk -F"." '{print $1"."$2"."$3".100"}'<<<$WLAN0_AP_IPV4_GW)
   local WLAN0_AP_IPV4_END=$(awk -F"." '{print $1"."$2"."$3".199"}'<<<$WLAN0_AP_IPV4_GW)
-  # replace the variables in files.
+  # Replace the variables in files.
   for var in WLAN0_AP_BAND WLAN0_AP_CHANNEL WLAN0_AP_SSID WLAN0_AP_PASSWORD \
              WLAN0_AP_IPV4_GW WLAN0_AP_IPV4_START WLAN0_AP_IPV4_END \
              ETH0_IPV4_ADDR ETH0_IPV4_GW ETH0_IPV4_DNS \
@@ -39,7 +39,9 @@ host_project() {
         xargs sudo sed -i "s#$var#$value#"
   done
 
+  # Run iperf3 server in the background for benchmark / speed test.
   host_append_to_rc_local "iperf3 -s -D"
+
   host_append_to_rc_local "iptables-restore < /etc/iptables.ipv4.nat || true"
 }
 
