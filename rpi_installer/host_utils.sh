@@ -83,6 +83,7 @@ host_dd_image() {
 
   echo "- Write the Raspberry Pi image into SD card [$device] ..."
   sudo dd if="$img_file" of="$device" bs=1M status=progress
+  sleep 3
   echo "- Re-detect the partition ..."
   sudo partprobe "$device"  # re-detect the partition table.
   sleep 3
