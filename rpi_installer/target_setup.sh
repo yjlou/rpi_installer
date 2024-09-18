@@ -56,6 +56,25 @@ target_setup_post_networks() {
   nmcli_wifi_conn wlan0 "$WLAN0_IPV4_ADDR" "$WLAN0_IPV4_GW" "$WLAN0_SSID" "$WLAN0_PASSWORD"
 }
 
+target_setup_dhcp_server() {
+  # Setup the DHCP server.
+  sudo systemctl stop dnsmasq  || true
+  cp conf/dnsmasq.conf /etc/dnsmasq.conf
+  sudo systemctl start dnsmasq
+}
+
+target_setup_nat() {
+  # routing and iptables
+  # Args:
+  #   $1  upstream interface (e.g. eth0 for soft AP, wlan0 for wisp)
+  #
+  local upstream_iface="$1"
+
+  sed -i "s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/" /etc/sysctl.conf
+  iptables -t nat -A POSTROUTING -o "$upstream_iface" -j MASQUERADE
+  iptables-save > /etc/iptables.ipv4.nat  # will be loaded in /etc/rc.local
+}
+
 target_setup_post_ssh_enable() {
   # Enable ssh
   sudo systemctl enable ssh

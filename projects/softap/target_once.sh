@@ -25,16 +25,6 @@ target_setup_post_ap_settings() {
   sudo systemctl unmask hostapd
   sudo systemctl enable hostapd
   sudo systemctl start hostapd
-
-  # DHCP server
-  sudo systemctl stop dnsmasq  || true
-  cp conf/dnsmasq.conf /etc/dnsmasq.conf
-  sudo systemctl start dnsmasq
-
-  # routing and iptables
-  sed -i "s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/" /etc/sysctl.conf
-  iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-  iptables-save > /etc/iptables.ipv4.nat  # will be loaded in /etc/rc.local
 }
 
 
@@ -45,6 +35,8 @@ main() {
   target_setup_pre_project_packages
   target_setup_post_networks
   target_setup_post_ap_settings
+  target_setup_dhcp_server
+  target_setup_nat "eth0"
   target_setup_post_ssh_enable
   target_setup_post_shutdown
   echo  "Setup is complete. The system is shutting itself down."
