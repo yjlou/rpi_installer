@@ -33,7 +33,8 @@ change_settigs_main() {
 
   # Ethernet
   echo "- Ethernet"
-  ask_and_replace "What's the Ethernet IP     (required as a gateway)? " "ETH0_IPV4_ADDR"
+  ask_and_replace "What's the Ethernet IP address/mask  (as the gateway)? " "ETH0_IPV4_ADDR"
+
 
   # Timezone
   echo "- Timezone"
