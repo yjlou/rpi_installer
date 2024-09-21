@@ -109,6 +109,7 @@ host_copy_conf() {
 host_set_config_file() {
   echo "hdmi_force_hotplug=1" | sudo tee -a "$BOOT_CONFIG_FILE"
   echo "dtparam=spi=on" | sudo tee -a "$BOOT_CONFIG_FILE"
+  echo "enable_uart=1" | sudo tee -a "$BOOT_CONFIG_FILE"
 }
 
 host_append_to_rc_local() {
