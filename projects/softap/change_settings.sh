@@ -32,7 +32,7 @@ change_settigs_main() {
   ask_and_replace "What's the WLAN channel number                    ? " "WLAN0_AP_CHANNEL"
   ask_and_replace "What's the WLAN SSID                              ? " "WLAN0_AP_SSID"
   ask_and_replace "What's the WLAN password  (empty for open network)? " "WLAN0_AP_PASSWORD"
-  ask_and_replace "What's the WLAN IP gateway        (empty for DHCP)? " "WLAN0_AP_IPV4_GW"
+  ask_and_replace "What's the WLAN IP gateway   (no mask, assume /24)? " "WLAN0_AP_IPV4_GW"
 
   # Ethernet
   echo "- Ethernet"

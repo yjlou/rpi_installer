@@ -8,6 +8,7 @@ cd "$(dirname "$0")"
 . "$GENERATED_DIR"/sniffer/vars.sh
 . "$SETTINGS_SH"
 . rpi_installer/target_setup.sh
+. shflags
 
 target_setup_pre_project_packages() {
   apt install -y xxd curl tmux python3 python3-pip git \
@@ -33,7 +34,15 @@ target_setup_install_rtl8812au() {
   make dkms_install
 }
 
-main() {
+
+FLAGS_HELP="USAGE: $0 [flags]"
+target_setup_parse_args "$@"
+eval set -- "${FLAGS_ARGV}"
+
+if [ ${FLAGS_project_only} -eq ${FLAGS_TRUE} ]; then
+  target_setup_pre_project_packages
+else
+  target_setup_post_ssh_enable  # turn on the SSH for debug.
   target_setup_pre_time_is_synced
   target_setup_pre_locale_and_keyboard
   target_setup_pre_common_packages
@@ -42,7 +51,4 @@ main() {
   target_setup_post_ssh_enable
   target_setup_install_rtl8812au
   target_setup_post_shutdown
-  echo  "Setup is complete. The system is shutting itself down."
-}
-
-main "$@"
+fi

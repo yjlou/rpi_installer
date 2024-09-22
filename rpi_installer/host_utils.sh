@@ -100,6 +100,7 @@ host_install_rpi_installer() {
 
   sudo mkdir -p "$TARGET"
   sudo cp -r "$RPI_INSTALLER_DIR" "$TARGET"
+  sudo cp -r "$DOWNLOADS_DIR"/shflags* "$TARGET"
 }
 
 host_copy_conf() {

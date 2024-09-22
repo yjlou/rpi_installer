@@ -82,6 +82,27 @@ target_setup_post_ssh_enable() {
 }
 
 target_setup_post_shutdown() {
+  echo  "[ $PROJECT_NAME ] Setup is complete. The system is shutting itself down."
+
   # Schedule a shutdown to inform the user everything is done.
   (sleep 10; shutdown -h now) &
+}
+
+# Used to parse the script arguments. Please pass in the arguments.
+#
+#   parse_args "$@"
+#
+target_setup_parse_args() {
+  # Common arguments. This will be applied to all scripts. Add wisely.
+  #
+  DEFINE_boolean 'project_only' false "Execute the project-specific code only." 'p'
+
+  # parse the command-line
+  FLAGS "$@" || exit $?
+  eval set -- "${FLAGS_ARGV}"
+
+  if [ ${FLAGS_help} -eq ${FLAGS_TRUE} ]; then
+    flags_help
+    exit 1
+  fi
 }
