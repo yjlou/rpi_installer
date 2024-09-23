@@ -129,7 +129,7 @@ host_install_target_once() {
   echo "- Install run once program into '$RC_LOCAL_FILE' ..."
   sudo mkdir -p "$RPI_INSTALLER_DIR_TARGET"
   sudo cp -r "$PROJECT_DIR/target_once.sh" "$RPI_INSTALLER_DIR_TARGET/target_once.sh-$PROJECT_NAME"
-  host_append_to_rc_local "/root/$RPI_INSTALLER_DIR/rpi_installer/run_once.sh /root/$RPI_INSTALLER_DIR/target_once.sh-$PROJECT_NAME >> /var/log/setup.log 2>&1"
+  host_append_to_rc_local "/root/$RPI_INSTALLER_DIR/rpi_installer/run_once.sh /root/$RPI_INSTALLER_DIR/target_once.sh-* >> /var/log/setup.log 2>&1"
 }
 
 host_pre() {
