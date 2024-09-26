@@ -9,7 +9,8 @@ NMCLI="sudo nmcli"
 nmcli_restart() {
   sudo systemctl stop dhcpcd.service  || true
   sudo systemctl disable dhcpcd.service  || true
-  sudo service network-manager restart
+  sudo service network-manager restart  || true  # for old version of raspberry images
+  sudo service NetworkManager restart  || true  # for new version of raspberry images
   sleep 10  # This takes some time to acquire the interfaces.
 }
 
