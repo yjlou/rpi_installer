@@ -40,7 +40,7 @@ host_project() {
   done
 
   # Run iperf3 server in the background for benchmark / speed test.
-  host_append_to_rc_local "iperf3 -s -D"
+  # host_append_to_rc_local "iperf3 -s -D"
 
   host_append_to_rc_local "iptables-restore < /etc/iptables.ipv4.nat || true"
 }

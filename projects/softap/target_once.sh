@@ -13,7 +13,8 @@ cd "$(dirname "$0")"
 target_setup_pre_project_packages() {
   apt install -y xxd curl python3 python3-pip \
       hostapd dnsmasq \
-      iperf3
+      iptables
+      # iperf3
 }
 
 target_setup_post_ap_settings() {
