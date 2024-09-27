@@ -45,7 +45,8 @@ else
   target_setup_post_networks
   target_setup_post_ap_settings
   target_setup_dhcp_server
-  target_setup_nat "eth0"  # The interface to the Internet
+  target_setup_nat "eth0"  # NAPT to Internet via Ethernet adaptor
+  target_setup_nat "usb0"  # NAPT to Internet via Android USB Tethering
   target_setup_post_ssh_enable
   target_setup_post_shutdown
 fi
