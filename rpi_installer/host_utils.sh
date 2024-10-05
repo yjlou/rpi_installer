@@ -57,8 +57,11 @@ host_sanity_check() {
     exit 1
   fi
 
+  # Get device size
+  local device_size="$(lsblk --output SIZE -n -d $device)"
+
   # Warn the user.
-  msg_warn "This will destroy the $device. Please confirm before we move on!"
+  msg_warn "This will destroy the [$device_size] $device. Please confirm before we move on!"
   if [ ${FLAGS_force} -ne ${FLAGS_TRUE} ]; then
     read -r -p "Are you sure? [y/N] " response
     case "$response" in
