@@ -32,6 +32,13 @@ if [ -z "$PROJECT_SETTINGS_IMPORTED" ]; then
   exit 1
 fi
 
+target_setup_disable_creating_account() {
+  # New version of RPi image would ask to create a new user account. Stop it!
+  # https://forums.raspberrypi.com/viewtopic.php?t=339340
+  systemctl stop userconfig    || true
+  systemctl disable userconfig || true
+}
+
 target_setup_pre_time_is_synced() {
   echo "- Sleep 10 secs to let the device have time to sync up ..."
   sleep 15
