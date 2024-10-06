@@ -19,9 +19,10 @@ host_project() {
   # These helpers need project-specific settings.
   host_copy_vars_and_settings
   host_install_target_once
-
-  # Define your project specific code below.
   host_copy_conf
+
+  # ----------------------------------------
+  # Define your project specific code below.
 }
 
 
