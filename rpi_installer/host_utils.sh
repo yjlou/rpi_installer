@@ -59,6 +59,21 @@ host_sanity_check() {
 
   # Get device size
   local device_size="$(lsblk --output SIZE -n -d $device)"
+  local device_size_in_bytes="$(lsblk -b --output SIZE -n -d $device)"
+
+  if (( $(echo "$device_size_in_bytes == 0" | bc -l) )); then
+    msg_fail "Device $device size is 0. Seems wrong to me."
+    exit 1
+  fi
+
+  # Stop if the disk size is larget than 500GB.
+  if [ ${FLAGS_force} -ne ${FLAGS_TRUE} ]; then
+    if (( $(echo "$device_size_in_bytes > 500000000000" | bc -l) )); then
+      msg_fail "Device $device size $device_size is too large. Not likely a USB drive."
+      msg_fail "Use --force to overwrite."
+      exit 1
+    fi
+  fi
 
   # Warn the user.
   msg_warn "This will destroy the [$device_size] $device. Please confirm before we move on!"
