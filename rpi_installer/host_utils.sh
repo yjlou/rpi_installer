@@ -134,8 +134,12 @@ host_set_config_file() {
 host_append_to_rc_local() {
   local cmds="$@"
 
-  # Remot the last of file, which is "exit 0"
-  sudo sed -i '$d' "$RC_LOCAL_FILE"
+  # In some image, the file is not existing.
+  sudo touch "$RC_LOCAL_FILE"
+  sudo chmod +x "$RC_LOCAL_FILE"
+  echo "#!/bin/bash" | sudo tee -a "$RC_LOCAL_FILE"
+  # Copy the original file -- except the last "exit 0" line.
+  grep -v "exit 0" "$RC_LOCAL_FILE".bak | sudo tee -a "$RC_LOCAL_FILE"  || true
 
   echo "$@" | sudo tee -a "$RC_LOCAL_FILE"
 
