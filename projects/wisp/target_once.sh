@@ -12,7 +12,7 @@ cd "$(dirname "$0")"
 
 target_setup_pre_project_packages() {
   apt install -y xxd curl python3 python3-pip \
-    dnsmasq
+    dnsmasq iptables
 }
 
 
