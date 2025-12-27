@@ -16,7 +16,7 @@ class TypeWriter(object):
   def Print(self, color, text):
     def XX(x):
       if x:
-        return 'X'
+        return '#'
       else:
         return ' '
 

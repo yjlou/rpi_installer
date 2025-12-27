@@ -12,10 +12,20 @@ cd "$(dirname "$0")"/..  # Change to source root directory
 export TTY=/dev/tty0
 export FMP_KEY
 
+show() {
+  local symbol="$1"
+
+  sudo -E sh -c "/root/rpi_installer/stock_price/show.py $symbol > $TTY"
+  sleep 5
+}
+
 #
 # main()
 #
+set -e
 while true; do
-  sudo -E sh -c "/root/rpi_installer/stock_price/show.py KO > $TTY"
-  sleep 60
+  show KO
+  show NVDA
+  show TSLA
+  show PLTR
 done
