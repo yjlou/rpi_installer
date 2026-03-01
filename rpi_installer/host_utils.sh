@@ -123,6 +123,7 @@ host_install_rpi_installer() {
 
 host_copy_conf() {
   sudo cp conf/.bashrc conf/.tmux.conf "${MOUNT_ROOT}/rootfs/root/"
+  sudo cp conf/userconf.txt "${MOUNT_ROOT}/boot/"
 }
 
 host_set_config_file() {
