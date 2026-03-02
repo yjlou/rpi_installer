@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
+set -x
 
 . rpi_installer/common.sh
 
@@ -64,6 +65,15 @@ nmcli_ethernet_conn() {
   fi
 }
 
+turn_on_wifi_and_scan() {
+  echo "Turn on WiFi and scan ..."
+  $NMCLI radio wifi on  # for bookworm+
+  sleep 5  # wait for the RF turned on
+  $NMCLI device wifi rescan  # force a rescan
+  sleep 5  # wait for the scna result
+  $NMCLI device wifi list    # check scan result
+}
+
 nmcli_wifi_dhcp() {
   local ifname="$1"
   local ssid="$2"
@@ -71,6 +81,7 @@ nmcli_wifi_dhcp() {
   [ -z "$password" ] || password="password $password"
 
   $NMCLI con delete "$ssid" || true
+  turn_on_wifi_and_scan
   $NMCLI dev wifi connect "$ssid" $password ifname "$ifname"
   $NMCLI con modify "$ssid" connection.autoconnect yes
   $NMCLI con modify id "$ssid" 802-11-wireless.mac-address ""
@@ -86,7 +97,8 @@ nmcli_wifi_static() {
   [ -z "$password" ] || password="password $password"
 
   $NMCLI con delete "$ssid" || true
-  $NMCLI dev wifi connect "$ssid" $password ifname "$ifname"
+  turn_on_wifi_and_scan
+  $NMCLI device wifi connect "$ssid" $password ifname "$ifname"
   $NMCLI con modify "$ssid" connection.autoconnect yes
   $NMCLI con modify id "$ssid" 802-11-wireless.mac-address ""
   $NMCLI con modify "$ssid" ipv4.addresses "$address"

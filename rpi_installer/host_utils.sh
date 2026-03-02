@@ -136,6 +136,7 @@ host_append_to_rc_local() {
   local cmds="$@"
 
   # In some image, the file is not existing.
+  sudo mv -f "$RC_LOCAL_FILE" "$RC_LOCAL_FILE".bak  || true
   sudo touch "$RC_LOCAL_FILE"
   sudo chmod +x "$RC_LOCAL_FILE"
   echo "#!/bin/bash" | sudo tee -a "$RC_LOCAL_FILE"
