@@ -4,5 +4,9 @@ functions.
 
 Verified with the following images:
 
-  - 2021-12-02-raspios-buster-armhf-lite.img
-  - 2024-07-04-raspios-bookworm-armhf-lite.img
+| ZeroW2 | ZeroW1  | images                                       |
+|--------|---------|----------------------------------------------|
+|        |         | 2021-12-02-raspios-buster-armhf-lite.img     |
+|        |         | 2024-07-04-raspios-bookworm-armhf-lite.img   |
+|        | PASS    | 2025-12-04-raspios-trixie-armhf-lite.img     |
+| PASS   |         | 2025-12-04-raspios-trixie-arm64-lite.img     |
